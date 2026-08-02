@@ -380,8 +380,22 @@ function BubbleQuestion({ q, options, onAnswer, showResult, selected, answerIdx,
             bubbleCls += " tp-bubble-selected";
           }
           return (
-            <div key={i} className={rowCls} onClick={() => !showResult && onAnswer(i)}>
-              <div className={bubbleCls}>{showResult && i === answerIdx ? <Check size={16} /> : showResult && i === selected && i !== answerIdx ? <X size={16} /> : LETTERS[i]}</div>
+            <div 
+              key={i} 
+              className={rowCls} 
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (!showResult && (e.key === "Enter" || e.key === " ")) {
+                  e.preventDefault();
+                  onAnswer(i);
+                }
+              }}
+              onClick={() => !showResult && onAnswer(i)}
+            >
+              <div className={bubbleCls}>
+                {showResult && i === answerIdx ? <Check size={16} /> : showResult && i === selected && i !== answerIdx ? <X size={16} /> : LETTERS[i]}
+              </div>
               <span style={{ fontSize: 14.5, color: "var(--ink)" }}>{opt}</span>
             </div>
           );
@@ -390,7 +404,6 @@ function BubbleQuestion({ q, options, onAnswer, showResult, selected, answerIdx,
     </div>
   );
 }
-
 function SectionHeader({ icon: Icon, eyebrow, title, sub }) {
   return (
     <div style={{ marginBottom: 20 }}>
@@ -723,7 +736,7 @@ function ReadingTab() {
    ============================================================ */
 function Part5Tab({ scoreHistory, addScoreEntry }) {
   const [diffFilter, setDiffFilter] = useState("All");
-  const [mode, setMode] = useState("practice"); // practice | timed | exam
+  const [mode, setMode] = useState("practice");
   const [order, setOrder] = useState([]);
   const [pos, setPos] = useState(0);
   const [selected, setSelected] = useState(null);
@@ -738,8 +751,8 @@ function Part5Tab({ scoreHistory, addScoreEntry }) {
 
   const pool = useMemo(() => PART5_POOL.filter((q) => diffFilter === "All" || q.diff === diffFilter), [diffFilter]);
 
-  const startSet = useCallback((m) => {
-    const shuffled = [...pool.keys()].sort(() => Math.random() - 0.5);
+  const startSet = useCallback((m, currentPool = pool) => {
+    const shuffled = [...currentPool.keys()].sort(() => Math.random() - 0.5);
     setOrder(shuffled);
     setPos(0);
     setSelected(null);
@@ -750,8 +763,13 @@ function Part5Tab({ scoreHistory, addScoreEntry }) {
     setReviewOpen(false);
     setMode(m);
     setTimeLeft(60);
-  }, [pool]);
+  }, []);
 
+  useEffect(() => {
+    startSet("practice", pool);
+  }, [diffFilter, startSet, pool]);
+
+  // ... rest of Part5Tab component
   useEffect(() => { startSet("practice"); /* eslint-disable-next-line */ }, [diffFilter]);
 
   useEffect(() => {
