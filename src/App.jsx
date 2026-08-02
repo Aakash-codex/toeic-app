@@ -146,7 +146,7 @@ const GRAMMAR_TOPICS = [
   },
   {
     id: "tenses", title: "Verb Tenses", difficulty: "Medium",
-    explanation: "TOEIC Part 5 often tests choosing the correct tense based on time clues in the sentence (yesterday, now, since, by next week).",
+    explanation: "TOEIC              often tests choosing the correct tense based on time clues in the sentence (yesterday, now, since, by next week).",
     formula: "Present Simple: base/-s | Present Cont.: am/is/are + -ing | Present Perfect: have/has + p.p. | Past Simple: -ed | Future: will / be going to",
     examples: ["We usually ship orders on Fridays.", "The team has finished the project since March."],
     mistakes: ["Using present simple for a finished past action: 'I finish the report yesterday' (wrong).", "Missing 'have/has' in present perfect: 'She worked here since 2019' should be 'has worked'."],
